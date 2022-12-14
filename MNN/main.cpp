@@ -14,9 +14,24 @@ int main(int argc, char **argv) {
 
     for(i=0;i<16;i++) FPS[i]=0.0;
 
-    UltraFace ultraface("slim-320-quant-ADMM-50.mnn", 320, 240, 4, 0.65); // config model input
+    // config model input
+    //std::string model_name = "slim-320.mnn";
+    std::string model_name = "RFB-320.mnn";
+    //std::string model_name = "RFB-320-quant-KL-5792.mnn";
+    //std::string model_name = "RFB-320-quant-ADMM-32.mnn";
+    //std::string model_name = "slim-320-quant-ADMM-50.mnn";
 
-    cv::VideoCapture cap("Walks2.mp4");
+    std::string model_dir = "../";
+    UltraFace ultraface(model_dir.append(model_name), 320, 240, 4, 0.65);
+
+    cv::VideoCapture cap;
+    cap.open(0, cv::CAP_V4L2);
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, 1280);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 720);
+    cap.set(cv::CAP_PROP_FOURCC, cv::VideoWriter::fourcc('M', 'J', 'P', 'G'));
+    cap.set(cv::CAP_PROP_FPS, 30);
+    //cv::VideoCapture cap("../Walks2.mp4");
+
     if (!cap.isOpened()) {
         cerr << "ERROR: Unable to open the camera" << endl;
         return 0;
